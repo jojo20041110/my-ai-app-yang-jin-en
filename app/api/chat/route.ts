@@ -1,11 +1,11 @@
-import { openai } from '@ai-sdk/openai';
+import { google } from '@ai-sdk/google'; // 💡 改引進 Google 套件
 import { streamText } from 'ai';
 
 export async function POST(req: Request) {
   const { messages } = await req.json();
 
   const result = await streamText({
-    model: openai('gpt-4o-mini') as any,
+    model: google('gemini-1.5-flash'), // 💡 使用免費、速度極快的核心模型
     system: `你是本網站作者（一位熱血的大學生）的 AI 數位分身。請用親切、有自信且帶點幽默的學生口吻來回答使用者的提問。
 
 以下是你的個人真實背景資訊（當使用者問到你的自我介紹、專長、社團或經歷時，請務必以此為基礎回答）：
@@ -20,6 +20,6 @@ export async function POST(req: Request) {
     messages,
   });
 
-  // 💡 關鍵修正：從 toTextStreamResponse 改成 toDataStreamResponse
-  return result.toDataStreamResponse();
+  // 💡 配合你目前的設定，使用 toTextStreamResponse
+  return result.toTextStreamResponse();
 }
